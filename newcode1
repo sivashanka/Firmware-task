@@ -1,0 +1,23 @@
+import serial
+import time
+
+serial_port = serial.Serial('COM8', 2400)
+time.sleep(2)
+
+with open('Data.txt', 'rb') as file:
+    data_to_send = file.read()
+    start_time_transmission = time.time()
+    total_bytes_sent = 0
+    print("Transmission from PC to UNO Started/n")
+    for byte in data_to_send:
+        serial_port.write(bytes([byte]))
+        total_bytes_sent += 1
+        elapsed_time_transmission = time.time() - start_time_transmission
+        
+        if elapsed_time_transmission > 0:
+            transmission_speed = total_bytes_sent * 8 / elapsed_time_transmission
+            print("Transmission Speed: {:.2f} bits/second".format(transmission_speed))
+        else:
+            continue
+
+print("\nAll data is transmitted from PC to UNO\n")

@@ -1,0 +1,27 @@
+import serial
+import time
+
+port = "COM8"
+baud_rate = 2400
+
+siva = serial.Serial(port, baud_rate)
+time.sleep(2)
+
+siva.write(b"0\n1005\n")
+
+start_time_reception = time.time()
+total_bytes_received = 0
+
+while True:
+    received_byte = siva.read()
+    if received_byte:
+        total_bytes_received += 1
+    else:
+        break
+
+    elapsed_time_reception = time.time() - start_time_reception
+    if elapsed_time_reception > 0:
+        reception_speed = total_bytes_received * 8 / elapsed_time_reception
+        print("Reception Speed: {:.2f} bits/second".format(reception_speed))
+
+siva.close()
